@@ -2,9 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 var loginSchema=new Schema ({
-    id:{
-        type:String
-    },
     code:{
         type:String
     },

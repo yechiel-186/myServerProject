@@ -1,4 +1,4 @@
-const userSchema = require("../mySchema/userSchema");
+const userSchema = require("../models/userSchema");
 
 function userController(){
     function create(req,res){
