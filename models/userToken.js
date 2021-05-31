@@ -38,10 +38,6 @@ function userToken(isnew,token, fullName, ID_number, role, roleNumber, email){
             return false;
         }
 }
-
-return {token,
-        isNotExpired}
-
 }
 
 module.exports=userToken;

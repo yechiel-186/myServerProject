@@ -17,6 +17,14 @@ var userSchema = new Schema({
     phone:{
         type:Number,
         
+    },
+    role:{
+        type:String,
+        default:"Intern"
+    },
+    roleNumber:{
+        type:Number,
+        default:1
     }
 });
 

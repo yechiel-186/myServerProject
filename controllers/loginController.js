@@ -1,6 +1,6 @@
 const userSchema = require("../models/userSchema");
 const loginSchema = require("../models/loginSchema");
-const useToken = require("../models/userToken");
+const userToken = require("../models/userToken");
 function loginController(){
     function checkUserNutExits(req,res){
         //בדיקה האם משתמש לא קיים 
@@ -24,20 +24,10 @@ function loginController(){
 }
 
 function checkCode(req,res){
-    // loginSchema.findOne(req.body._id, function(err,user){
-        // if(err){
-        //     console.log("err");
-        //     res.status(404).send();  
-        // }
-        // if(!user){
-        //     return res.status(404).send("no access")
-        // }
-        // if(user){
             loginSchema.updateOne({_id:req.body._id,code:req.body.code},{$set:{Verified:true}},function(err, result){
                 if(err){
                     console.log("456");
                     return res.status(404).send();  
-                    
                 }
                 if(!result.n){
                     console.log("789");
@@ -50,19 +40,37 @@ function checkCode(req,res){
    
 
 function ImageAuthentication(req,res){
-    
-    if(true){
-        var newUser=userSchema(req.body);
-        var newUserToken= useToken(true,0,req.body.fullName,req.body.ID_number,req.body.role,req.body.roleNumber,req.body.email);
-        console.log(newUserToken.token);
-        newUser.save(function (err, user){
-            if(err){
+    loginSchema.findOne({_id:req.body.auth._id,Verified:true},function(err,user){
+         if(err){
                 return res.status(404).send("")
             }
-            return res.status(201).send();
-        });
+            if(!user){
+                return res.status(403).send("no accses")
+            }
+            if(true){
+                userSchema.findOne({ID_number:req.body.user.ID_number},function(err,user){
+                    if(err){
+                        res.status(303).send();
+                        console.log("ikjhue");
+                    }
+                    if(!user){
+                var newUser=new userSchema(req.body.user);
+                newUser.save(function(err,user){
+                    if(err){
+                        res.status(303).send("err")
+                    }
+                    var newUserToken= new userToken(true,0,req.body.user);
+                
+                return res.status(201).send({token:newUserToken.token});
+                })
+                    }
+                })
+                
+                
+            }
+    })
+
     }
-}
 
     return {
         checkUserNutExits,
