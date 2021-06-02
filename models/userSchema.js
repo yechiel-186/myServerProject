@@ -6,8 +6,8 @@ var userSchema = new Schema({
         type:String,
         required: true
     },
-    ID_number:{
-        type:Number,
+    ID:{
+        type:String,
         
     },
     passport:{

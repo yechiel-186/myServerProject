@@ -4,17 +4,18 @@ const userToken = require("../models/userToken");
 function loginController(){
     function checkUserNutExits(req,res){
         //בדיקה האם משתמש לא קיים 
-    userSchema.findOne({ID_number:req.body.ID_number},function(err,user){
+    userSchema.findOne({ID:req.body.ID},function(err,user){
         if(err){
             console.log("err");
             return res.status(500).send();
         }
         if(user){
             console.log("user");
-            return res.status(200).send("user exsits"); 
+            return res.status(401).send({"message":"user exsits"}); 
         }
-        if(!user){
-            var userLogin=new loginSchema({code:"1234"});
+        else{
+            var code="1234";
+            var userLogin=new loginSchema({code:code});
             userLogin.save( function (err, doc){
                 if(err){
                     return res.status(404).send()}          
@@ -48,7 +49,7 @@ function ImageAuthentication(req,res){
                 return res.status(403).send("no accses")
             }
             if(true){
-                userSchema.findOne({ID_number:req.body.user.ID_number},function(err,user){
+                userSchema.findOne({ID:req.body.user.ID},function(err,user){
                     if(err){
                         res.status(303).send();
                         console.log("ikjhue");

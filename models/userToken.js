@@ -4,16 +4,16 @@ var split= "!";
 var ttl=60*1000*2;
 
 
-function userToken(isnew,token, fullName, ID_number, role, roleNumber, email){
+function userToken(isnew,token, fullName, ID, role, roleNumber, email){
     if(isnew){
-        this.ID_number=ID_number;
+        this.ID=ID;
         this.email=email;
         this.fullName=fullName;
         this.roleNumber=roleNumber;
         this.role=role;
         this.expirationTime=Date.now()+ttl;
         this.token=EnCrypto.getEncrypt(
-            ID_number+split+
+            ID+split+
             email+split+
             fullName+split+
             role+split+
@@ -23,7 +23,7 @@ function userToken(isnew,token, fullName, ID_number, role, roleNumber, email){
         
         this.token=token;
         var strData=EnCrypto.getDecrypt(token).split(split);
-        this.ID_number=strData[0];
+        this.ID=strData[0];
         this.email=strData[1];
         this.fullName=strData[2];
         this.role=strData[3];
