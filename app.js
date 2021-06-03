@@ -11,5 +11,5 @@ mongoose.connect(dbPath);
 app.use(cors());
 app.use(expressFunction.json());
 app.use('/api/users',require('./routes/userRouts.js'));
-app.use('/auth',require('./routes/loginRoutes.js'));
+app.use('/auth',require('./routes/registerRoutes.js'));
 app.listen(port);

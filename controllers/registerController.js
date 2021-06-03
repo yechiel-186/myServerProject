@@ -1,7 +1,7 @@
 const userSchema = require("../models/userSchema");
 const loginSchema = require("../models/loginSchema");
 const userToken = require("../models/userToken");
-function loginController(){
+function registerController(){
     function checkUserNutExits(req,res){
         //בדיקה האם משתמש לא קיים 
     userSchema.findOne({ID:req.body.ID},function(err,user){
@@ -15,7 +15,7 @@ function loginController(){
         }
         else{
             var code="1234";
-            var userLogin=new loginSchema({code:code});
+            var userLogin=new loginSchema({code:code}); 
             userLogin.save( function (err, doc){
                 if(err){
                     return res.status(404).send()}          
@@ -28,11 +28,12 @@ function checkCode(req,res){
             loginSchema.updateOne({_id:req.body._id,code:req.body.code},{$set:{Verified:true}},function(err, result){
                 if(err){
                     console.log("456");
-                    return res.status(404).send();  
+                    return res.status(404).send(err);  
                 }
                 if(!result.n){
-                    console.log("789");
-                    return res.status(403).send()
+                    console.log(result.n);
+                    console.log("dont have in DB this _id");
+                    return res.status(403).send({"message":""})
                 }
                 console.log("1000");
                 res.status(200).send({_id:req.body._id})
@@ -79,4 +80,4 @@ function ImageAuthentication(req,res){
         ImageAuthentication
     }    
 }
-module.exports=loginController();
+module.exports=registerController();
