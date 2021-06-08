@@ -15,7 +15,7 @@ function registerController(){
         }
         else{
             var code="1234";
-            var userLogin=new loginSchema({code:code}); 
+            var userLogin=new loginSchema({code:code,phone:req.body.phone}); 
             userLogin.save( function (err, doc){
                 if(err){
                     return res.status(404).send()}          
@@ -25,24 +25,25 @@ function registerController(){
 }
 
 function checkCode(req,res){
-            loginSchema.updateOne({_id:req.body._id,code:req.body.code},{$set:{Verified:true}},function(err, result){
+           loginSchema.updateOne({_id:req.body._id,code:req.body.code},{$set:{verified:true}},function(err, result){
                 if(err){
                     console.log("456");
                     return res.status(404).send(err);  
+
+
                 }
                 if(!result.n){
-                    console.log(result.n);
-                    console.log("dont have in DB this _id");
-                    return res.status(403).send({"message":""})
+                    return res.status(403).send({"message":"dont have in DB this _id"})
                 }
                 console.log("1000");
-                res.status(200).send({_id:req.body._id})
+                res.status(200).send()
             })
         }
    
 
 function ImageAuthentication(req,res){
-    loginSchema.findOne({_id:req.body.auth._id,Verified:true},function(err,user){
+    loginSchema.findOne({_id:req.body.user._id,phone:req.body.intern.phone,verified:true},function(err,user){
+        
          if(err){
                 return res.status(404).send("")
             }
@@ -50,19 +51,19 @@ function ImageAuthentication(req,res){
                 return res.status(403).send("no accses")
             }
             if(true){
-                userSchema.findOne({ID:req.body.user.ID},function(err,user){
+                userSchema.findOne({ID:req.body.intern.ID},function(err,user){
                     if(err){
-                        res.status(303).send();
                         console.log("ikjhue");
+                        res.status(303).send();   
                     }
                     if(!user){
-                var newUser=new userSchema(req.body.user);
+                var newUser=new userSchema(req.body.intern);
                 newUser.save(function(err,user){
                     if(err){
-                        res.status(303).send("err")
+                        res.status(500).send("err")
                     }
-                    var newUserToken= new userToken(true,0,req.body.user);
-                
+                    var newUserToken= new userToken(true,0,req.body.intern);
+                console.log(newUserToken.token);
                 return res.status(201).send({token:newUserToken.token});
                 })
                     }

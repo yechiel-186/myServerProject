@@ -6,20 +6,14 @@ var ttl=60*1000*2;
 
 function userToken(isnew,token,user){
     if(isnew){
-        this.ID=user.ID;
-        this.fullName=user.fullName;
-        this.roleNumber=user.roleNumber;
-        this.role=user.role;
-        this.expirationTime=user.Date.now()+ttl;
-        this.token=EnCrypto.getEncrypt(
-            ID+split+
-            email+split+
-            fullName+split+
-            role+split+
-            roleNumber+split+
+        this.expirationTime=Date.now()+ttl;
+        this.token=EnCrypto.getEncrypt( 
+            user.ID+split+
+            user.fullName+split+
+            user.role+split+
+            user.roleNumber+split+
             this.expirationTime);
     }else{
-        
         this.token=token;
         var userData=EnCrypto.getDecrypt(token).split(split);
         this.ID=userData[0];
@@ -29,7 +23,7 @@ function userToken(isnew,token,user){
         this.expirationTime=userData[4];
     }
 
-    var isNotExpired =function() {
+    this.isNotExpired =function() {
         if(this.expirationTime && parseInt(this.expirationTime) > Date.now()){
             return true;
         }else{

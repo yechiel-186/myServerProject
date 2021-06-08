@@ -11,6 +11,8 @@ function userController(){
 
 
     function getAll(req,res){
+        console.log(req.token);
+        res.status(202).send(req.user)
         console.log("getAll");
     }
 

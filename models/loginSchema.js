@@ -5,9 +5,12 @@ var loginSchema=new Schema ({
     code:{
         type:String
     },
-    Verified:{
+    verified:{
         type:Boolean,
         default:false
+    },
+    phone:{
+        type:Number
     }
 });
 

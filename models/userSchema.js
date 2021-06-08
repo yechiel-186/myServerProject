@@ -8,6 +8,7 @@ var userSchema = new Schema({
     },
     ID:{
         type:String,
+        unique: true
         
     },
     passport:{
@@ -16,7 +17,7 @@ var userSchema = new Schema({
     },
     phone:{
         type:Number,
-        
+        unique: true
     },
     role:{
         type:String,
@@ -26,6 +27,7 @@ var userSchema = new Schema({
         type:Number,
         default:1
     }
+
 });
 
 module.exports = mongoose.model("user", userSchema);
