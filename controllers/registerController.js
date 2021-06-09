@@ -28,9 +28,7 @@ function checkCode(req,res){
            loginSchema.updateOne({_id:req.body._id,code:req.body.code},{$set:{verified:true}},function(err, result){
                 if(err){
                     console.log("456");
-                    return res.status(404).send(err);  
-
-
+                    return res.status(404).send(err); 
                 }
                 if(!result.n){
                     return res.status(403).send({"message":"dont have in DB this _id"})
