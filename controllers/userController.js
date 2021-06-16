@@ -9,11 +9,42 @@ function userController(){
            console.log(req.body);
 }
 
+    function getQuesitnners(req,res){
+        userSchema.findOne({ID:req.user.ID},function(err,user){
+            console.log(req.user.ID);
+            if(err){
+               return res.status(401).send();
+            }
+            if(!user){
+                console.log("no user");
+            }
+           
+        return res.status(201).send({user})}
+        )}
+
+      function updateQuesitnners(req,res){
+          console.log('up work');
+          userSchema.updateOne({_id:req.user._id},req.body,{new:true},function(err,result){
+              console.log(req.body);
+              if(err){
+                  console.log(err);
+                  return res.status(401).send()
+              }if(result){
+                    console.log(result);
+              return res.status(200).send("update")}
+              console.log(result.n);
+          })
+          
+      }
 
     function getAll(req,res){
-        console.log(req.token);
-        res.status(202).send(req.user)
-        console.log("getAll");
+        userSchema.find(function(err,list){
+            if(err){
+                return res.status(403).send()
+            }if(list){
+                return res.status(202).send(list)
+            }
+        })
     }
 
     function getUser(req,res){
@@ -29,7 +60,10 @@ function userController(){
         create,
         getAll,
         getUser,
-        deleteUser
+        deleteUser,
+        getQuesitnners,
+        updateQuesitnners,
+        getAll
         
     }
 }

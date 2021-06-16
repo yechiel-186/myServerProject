@@ -26,7 +26,35 @@ var userSchema = new Schema({
     roleNumber:{
         type:Number,
         default:1
+    },
+    age:{
+        type:Number
+    },
+    country:{
+    type:String
+    },
+    city:{
+        type:String
+    },
+    graducition:{
+        type:Number
+    },
+    academic:{
+        type:Number
+    },
+    medical:{
+        type:String
+    },
+    residency:{
+        type:String
+    },
+    department:{
+        type:String
+    },
+    yearResidency:{
+        type:Number
     }
+
 
 });
 

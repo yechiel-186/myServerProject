@@ -3,7 +3,6 @@ const loginSchema = require("../models/loginSchema");
 const userToken = require("../models/userToken");
 function registerController(){
     function checkUserNutExits(req,res){
-        //בדיקה האם משתמש לא קיים 
     userSchema.findOne({ID:req.body.ID},function(err,user){
         if(err){
             console.log("err");
@@ -41,7 +40,6 @@ function checkCode(req,res){
 
 function ImageAuthentication(req,res){
     loginSchema.findOne({_id:req.body.user._id,phone:req.body.intern.phone,verified:true},function(err,user){
-        
          if(err){
                 return res.status(404).send("")
             }
@@ -55,14 +53,21 @@ function ImageAuthentication(req,res){
                         res.status(303).send();   
                     }
                     if(!user){
+                        req.body.intern.role="intern";
+                        req.body.intern.roleNumber=1;
                 var newUser=new userSchema(req.body.intern);
-                newUser.save(function(err,user){
+                            console.log(newUser);
+                newUser.save(function(err,result){
                     if(err){
                         res.status(500).send("err")
+                    }if(result){
+                        var newUserToken= new userToken(true,0,req.body.intern,result._id);
+                        return res.status(201).send({token:newUserToken.token});
+                    }if(!result){
+                        console.log(result+'lll');
                     }
-                    var newUserToken= new userToken(true,0,req.body.intern);
-                console.log(newUserToken.token);
-                return res.status(201).send({token:newUserToken.token});
+                   
+               
                 })
                     }
                 })
