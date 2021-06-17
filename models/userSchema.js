@@ -20,12 +20,11 @@ var userSchema = new Schema({
         unique: true
     },
     role:{
-        type:String,
-        default:"Intern"
+        type:String
+        
     },
     roleNumber:{
-        type:Number,
-        default:1
+        type:Number
     },
     age:{
         type:Number

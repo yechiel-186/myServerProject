@@ -39,31 +39,33 @@ function checkCode(req,res){
    
 
 function ImageAuthentication(req,res){
-    loginSchema.findOne({_id:req.body.user._id,phone:req.body.intern.phone,verified:true},function(err,user){
+    loginSchema.findOne({_id:req.body.user._id,phone:req.body.intern.phone,verified:true},function(err,userLogin){
          if(err){
                 return res.status(404).send("")
             }
-            if(!user){
+            if(!userLogin){
                 return res.status(403).send("no accses")
             }
             if(true){
                 userSchema.findOne({ID:req.body.intern.ID},function(err,user){
                     if(err){
                         console.log("ikjhue");
-                        res.status(303).send();   
+                        return res.status(303).send();   
                     }
                     if(!user){
                         req.body.intern.role="intern";
                         req.body.intern.roleNumber=1;
                 var newUser=new userSchema(req.body.intern);
-                            console.log(newUser);
+                            console.log(newUser)
                 newUser.save(function(err,result){
                     if(err){
-                        res.status(500).send("err")
+                        console.log(err);
+                         res.status(500).send(err)
                     }if(result){
-                        var newUserToken= new userToken(true,0,req.body.intern,result._id);
+                        var newUserToken= new userToken(true,0,result,result._id);
+                        console.log(newUserToken.token);
                         return res.status(201).send({token:newUserToken.token});
-                    }if(!result){
+                    }else{
                         console.log(result+'lll');
                     }
                    
