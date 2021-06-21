@@ -52,6 +52,9 @@ var userSchema = new Schema({
     },
     yearResidency:{
         type:Number
+    },
+    typeUse:{
+        type:mongoose.Types.ObjectId,refPath:'role'
     }
 
 

@@ -31,8 +31,8 @@ function userController(){
                   return res.status(401).send()
               }if(result){
                     console.log(result);
-              return res.status(200).send("update")}
-              console.log(result.n);
+              return res.status(200).send({"message":"update"})}
+              
           })
           
       }

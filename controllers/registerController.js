@@ -1,6 +1,7 @@
 const userSchema = require("../models/userSchema");
 const loginSchema = require("../models/loginSchema");
 const userToken = require("../models/userToken");
+const intern=require("../models/internSchema")
 function registerController(){
     function checkUserNutExits(req,res){
     userSchema.findOne({ID:req.body.ID},function(err,user){
@@ -56,28 +57,29 @@ function ImageAuthentication(req,res){
                         req.body.intern.role="intern";
                         req.body.intern.roleNumber=1;
                 var newUser=new userSchema(req.body.intern);
-                            console.log(newUser)
                 newUser.save(function(err,result){
                     if(err){
                         console.log(err);
                          res.status(500).send(err)
                     }if(result){
-                        var newUserToken= new userToken(true,0,result,result._id);
-                        console.log(newUserToken.token);
+                        console.log("is");
+                        var newIntern=new intern();
+                        newIntern.save(function(err,end){
+                            console.log(end);
+                            if(err){
+                                res.status(303).send()
+                            }if(end)
+                            newUser.typeUse=end;
+                            console.log(newUser);
+                        })
+                        var newUserToken= new userToken(true,0,result,result._id);                       
                         return res.status(201).send({token:newUserToken.token});
-                    }else{
-                        console.log(result+'lll');
-                    }
-                   
-               
+                    } 
                 })
                     }
-                })
-                
-                
+                })    
             }
     })
-
     }
 
     return {

@@ -9,6 +9,7 @@ function dataController(req,res,next){
        req.user=newUser;
     return next()
     }
+    
     res.status(404).send()
 }
 
