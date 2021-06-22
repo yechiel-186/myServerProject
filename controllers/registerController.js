@@ -67,13 +67,14 @@ function ImageAuthentication(req,res){
                         newIntern.save(function(err,end){
                             console.log(end);
                             if(err){
-                                res.status(303).send()
-                            }if(end)
-                            newUser.typeUse=end;
-                            console.log(newUser);
-                        })
+                                return res.status(303).send()
+                            }
+                            result.typeUser=end;
+                            result.save();
+                            console.log(result);
                         var newUserToken= new userToken(true,0,result,result._id);                       
                         return res.status(201).send({token:newUserToken.token});
+                        })
                     } 
                 })
                     }

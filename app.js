@@ -12,6 +12,7 @@ mongoose.connect(dbPath);
 
 app.use(cors());
 app.use(expressFunction.json());
+
 app.use('/login',require('./routes/loginRouts.js'));
 app.use('/api',dataController);
 app.use('/api/users',require('./routes/userRouts.js'));

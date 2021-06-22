@@ -1,14 +1,7 @@
+const internSchema = require("../models/internSchema");
 const userSchema = require("../models/userSchema");
 
 function userController(){
-    function create(req,res){
-        var newUser=new userSchema(req.body);
-       
-           newUser.save();
-           res.status(201).send("the test is true");
-           console.log(req.body);
-}
-
     function getQuesitnners(req,res){
         userSchema.findOne({ID:req.user.ID},function(err,user){
             console.log(req.user.ID);
@@ -18,20 +11,41 @@ function userController(){
             if(!user){
                 console.log("no user");
             }
-           
-        return res.status(201).send({user})}
+        user.populate('typeUser',function(err,result){
+            if(err){
+                return res.status(401).send();
+            }
+                res.status(200).send(result.typeUser)
+        })    
+    }   
         )}
-
       function updateQuesitnners(req,res){
           console.log('up work');
-          userSchema.updateOne({_id:req.user._id},req.body,{new:true},function(err,result){
+          userSchema.findById(req.user._id,function(err,user){
               console.log(req.body);
               if(err){
-                  console.log(err);
-                  return res.status(401).send()
-              }if(result){
-                    console.log(result);
-              return res.status(200).send({"message":"update"})}
+                  console.log("err1");
+                  return res.status(500).send()
+              }if(user){
+                    console.log(user);
+                    user.populate('typeUser',function(err,middle)
+                    {
+                        if(err){
+                            console.log("err2");
+                            return res.status(500).send()
+                        }
+                        middle.typeUser.overwrite(req.body).save(function(err,result){
+                            if(err){
+                                console.log("err3");
+                                return res.status(500).send()
+                                
+                            }
+                            console.log(result, "this");
+                             res.status(200).send({"message":"update" , "obj":result})
+                        })
+                    })
+              
+            }
               
           })
           
@@ -57,7 +71,6 @@ function userController(){
 
 
     return{
-        create,
         getAll,
         getUser,
         deleteUser,
