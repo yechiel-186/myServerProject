@@ -14,6 +14,7 @@ app.use(cors());
 app.use(expressFunction.json());
 app.use('/admin',require('./routes/adminRouts.js'));
 app.use('/login',require('./routes/loginRouts.js'));
+app.use('/api/supervisor',require('./routes/supervisorRouts.js'))
 app.use('/api',dataController);
 app.use('/api/users',require('./routes/userRouts.js'));
 app.use('/auth',require('./routes/registerRoutes.js'));

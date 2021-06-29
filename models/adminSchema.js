@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 var adminSchema=new Schema(
     {
-        user:{
-            type:Schema.Types.ObjectId,ref:'user'
-        },
         password:String,
+        supervisors:[{
+            type:mongoose.Types.ObjectId,ref:'user'
+        }],
         academics:[{
             type:mongoose.Types.ObjectId,ref:'academic'
         }]

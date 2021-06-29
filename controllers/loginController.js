@@ -3,7 +3,7 @@ const userSchema=require("../models/userSchema");
 const userToken = require("../models/userToken");
  
 function loginController(){
-    function loginIntern(req,res){
+    function login(req,res){
         userSchema.findOne({ID:req.params.ID},function(err,user){
             console.log(req.params.ID);
             if(err){
@@ -36,7 +36,7 @@ function loginController(){
             }
             if(doc){
                 userSchema.findOne({phone:doc.phone},function(err,user){
-                    console.log(doc.phone+"jhguy");
+                    
                     if(err){
                         return res.status(500).send();
                     }
@@ -51,7 +51,7 @@ function loginController(){
         })
     }
     return{
-        loginIntern,
+        login,
         checkCode
     }
 }

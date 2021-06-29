@@ -1,7 +1,7 @@
 var EnCrypto=require('../utils/token');
 
 var split= "!";
-var ttl=60*1000*2;
+var ttl=60*1000*10;
 
 
 function userToken(isnew,token,user,_id){

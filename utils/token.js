@@ -14,8 +14,8 @@ function crypto(){
     }
 
     return {
-        getEncrypt: getEncrypt,
-        getDecrypt: getDecrypt
+        getEncrypt,
+        getDecrypt
     }
 }
 module.exports=crypto();
