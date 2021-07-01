@@ -21,6 +21,8 @@ function supervisorController(){
                         if(err){
                            return res.statut(500).send()
                         }
+                        req.body.role='intern';
+                        req.body.roleNumber=100;
                     var newIntern=new intern(req.body)
                     newIntern.save(function (err, user4){
                         if(err){
@@ -35,7 +37,6 @@ function supervisorController(){
                             user5.interns.push(user4)
                             console.log(user5);
                             res.status(200).send();
-
                         })
                         })
                     })
@@ -43,8 +44,46 @@ function supervisorController(){
             }
         })
     }
+    function getInterns(req,res){
+        user.findById(req.user._id).populate({path:'typeUser', select:'interns'}).exec(function(err,user2){
+            if(err){
+                return res.status(500).send()
+            }
+            res.status(200).send(user2.typeUser.interns);
+        })
+        
+    }
+
+
+    function getAllInternsAcademic(req,res){
+        console.log("ghun");
+        user.findById(req.user._id).populate({path:'typeUser',populate:{path:'supervisor',populate:{path:'academic',populate:{path:'interns'}}}}).exec(function(err,user){
+            
+            console.log(user);
+        })
+        
+    }
+
+
+
+
+    function addInterns(req,res){
+        user.findById(req.user._id).populate({path:'typeUser', select:'interns'}).exec(function(err,user2){
+            if(err){
+                return res.status(500).send()
+            }
+            user2.typeUser.interns.push(req.body._id)
+            res.status(200).send(user2.typeUser.interns);
+        })
+    }
+
+
+
     return{
-        loginSupervisorEndCreateIntern
+        loginSupervisorEndCreateIntern,
+        getInterns,
+        addInterns,
+        getAllInternsAcademic
     }
 }
 

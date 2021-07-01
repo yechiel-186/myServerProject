@@ -55,7 +55,7 @@ function ImageAuthentication(req,res){
                     }
                     if(!user){
                         req.body.intern.role="intern";
-                        req.body.intern.roleNumber=1;
+                        req.body.intern.roleNumber=100;
                 var newUser=new userSchema(req.body.intern);
                 newUser.save(function(err,result){
                     if(err){
@@ -73,7 +73,7 @@ function ImageAuthentication(req,res){
                             result.save();
                             console.log(result);
                         var newUserToken= new userToken(true,0,result,result._id);                       
-                        return res.status(201).send({token:newUserToken.token});
+                        return res.status(201).send({token:newUserToken.token,user:result});
                         })
                     } 
                 })

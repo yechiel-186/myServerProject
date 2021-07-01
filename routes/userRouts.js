@@ -3,7 +3,7 @@ var express =require('express');
 const userController=require('../controllers/userController');
 const userRoutes=express.Router();
 
-
+userRoutes.get('/getAllAcademic',userController.getAllAcademics)
 userRoutes.get('/getQuesitnners',userController.getQuesitnners);
 userRoutes.put('/updateQuesitnners',userController.updateQuesitnners);
 userRoutes.get('/all', userController.getAll);

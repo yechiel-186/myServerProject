@@ -39,7 +39,7 @@ var userSchema = new Schema({
         type:Number
     },
     academic:{
-        type:Number
+        type:String
     },
     medical:{
         type:String

@@ -1,5 +1,6 @@
 const internSchema = require("../models/internSchema");
 const userSchema = require("../models/userSchema");
+const academic=require('../models/academicScema')
 
 function userController(){
     function getQuesitnners(req,res){
@@ -50,8 +51,18 @@ function userController(){
           })
           
       }
-
+function getAllAcademics(req,res){
+     console.log("app");
+    academic.find(function(err,result){
+        if(err){
+            return res.status(500).send()
+    }
+    console.log(result.fullName);
+    res.status(200).send(result.fullName)
+})
+}
     function getAll(req,res){
+       
         userSchema.find(function(err,list){
             if(err){
                 return res.status(403).send()
@@ -76,7 +87,8 @@ function userController(){
         deleteUser,
         getQuesitnners,
         updateQuesitnners,
-        getAll
+        getAll,
+        getAllAcademics
         
     }
 }

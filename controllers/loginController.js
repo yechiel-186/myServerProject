@@ -44,7 +44,8 @@ function loginController(){
                         console.log(user);
                     var newToken=new userToken(true,0,user,user._id);
                     console.log(newToken);
-                    return res.status(201).send({token:newToken.token})
+                    console.log(user.roleNumber);
+                    return res.status(201).send({token:newToken.token, user:user})
                 }
                 }) 
             }

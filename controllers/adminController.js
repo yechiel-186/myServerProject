@@ -63,46 +63,59 @@ function adminController(){
 
     function createSupervisor(req,res){
         user.findOne({ID:req.user.ID},function(err,level1){
-            if(err){
-                return res.status(500).send()
-            }
-            user.findOne({ID:req.body.ID},function(err,level2){
                 if(err){
                     return res.status(500).send()
                 }
-                if(level2){
+                if(!level1){
+                    return res.status(500).send({"message":"no access"})
+                }
+                user.findOne({ID:req.body.ID},function(err,level2){
+                        if(err){
+                            return res.status(500).send()
+                        }
+                        if(level2){
                     return res.status(300).send({"message":"this supervisor is created"})
-                }
-            var newSupervisor=new supervisor();
-            newSupervisor.save(function(err,level3){
-                if(err){
-                    console.log("asd");
-                    return res.status(500).send()
-                }
-            req.body.role="supervisor";
-            req.body.roleNumber=200;
-            var newUser2=new user(req.body);
-            newUser2.typeUser=level3;
-            newUser2.save(function(err,level4){
-                if(err){
-                    return res.status(500).send()
-                }
-                level1.populate('typeUser',function(err,level5){
+                        }
+                academic.findOne({fullName:req.body.academic},function(err,level3){
+                    console.log(req.body.academic);
                     if(err){
                         return res.status(500).send()
                     }
-                    level5.typeUser.supervisors.push(level4)
-                    level1.typeUser.save()
-                    res.status(201).send({"message":"new supervisor is created"})
+                    var newSupervisor=new supervisor();
+                    newSupervisor.save(function(err,level4){
+                        if(err){
+                            return res.status(500).send()
+                        }
+                        req.body.role="supervisor";
+                        req.body.roleNumber=200;
+                        var newUser=new user(req.body);
+                        newUser.save(function(err,level5){
+                            if(err){
+                                console.log("test");
+                                return res.status(500).send()
+                            }
+                            level5.typeUser=level4;
+                            level5.typeUser.save(function(err,level6){
+                                if(err){
+                                    return res.status(500).send()
+                                }
+                            })
+                            level4.academic=level3;
+                            level4.save()
+                            console.log(level3);
+                            level3.supervisors.push(level4)
+                                level3.save()
+                                res.status(201).send({"message":"supervisor create"})
+                            })
+                        }) 
+                    })
                 })
             })
-        })
+        }
 
-            })
-            
-            })
-    }
 
+
+       
 
 
     function createAcademic(req,res){
@@ -145,7 +158,7 @@ function adminController(){
                         return res.status(500).send()
                     }
                     var arr=result.typeUser.academics.map(a=>a.fullName);
-                    console.log(arr);
+                    
                     res.status(200).send(arr)
                 });
                 

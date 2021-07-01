@@ -4,6 +4,7 @@ const adminRouts=express.Router();
 const adminController=require("../controllers/adminController.js")
 const dataController = require('../controllers/dataController.js');
 
+
 adminRouts.post('/createAdmin',adminController.createAdmin);
 adminRouts.post('/loginAdmin',adminController.loginAdmin);
 adminRouts.use('/api',dataController);
