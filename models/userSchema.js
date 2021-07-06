@@ -26,32 +26,8 @@ var userSchema = new Schema({
     roleNumber:{
         type:Number
     },
-    age:{
-        type:Number
-    },
-    country:{
-    type:String
-    },
-    city:{
+    image:{
         type:String
-    },
-    graducition:{
-        type:Number
-    },
-    academic:{
-        type:String
-    },
-    medical:{
-        type:String
-    },
-    residency:{
-        type:String
-    },
-    department:{
-        type:String
-    },
-    yearResidency:{
-        type:Number
     },
     typeUser:{
         type:mongoose.Types.ObjectId,refPath:'role'

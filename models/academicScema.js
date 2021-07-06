@@ -3,9 +3,11 @@ const Schema = mongoose.Schema;
 
 var academicSchema = new Schema({
     ID:String,
-    fullName:String,
+    fullName:{
+        type:String
+    },
     interns:[{
-        type:Schema.Types.ObjectId,ref:'intern'
+        type:Schema.Types.ObjectId,ref:'user'
     }],
     supervisors:[{
         type:mongoose.Types.ObjectId,ref:'supervisor'

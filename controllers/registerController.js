@@ -62,7 +62,7 @@ function ImageAuthentication(req,res){
                         console.log(err);
                          res.status(500).send(err)
                     }if(result){
-                        console.log("is");
+                        console.log("is", result);
                         var newIntern=new intern();
                         newIntern.save(function(err,end){
                             console.log(end);
@@ -82,6 +82,7 @@ function ImageAuthentication(req,res){
             }
     })
     }
+    
 
     return {
         checkUserNutExits,

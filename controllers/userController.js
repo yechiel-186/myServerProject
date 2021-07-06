@@ -1,6 +1,7 @@
 const internSchema = require("../models/internSchema");
 const userSchema = require("../models/userSchema");
-const academic=require('../models/academicScema')
+const academic=require('../models/academicScema');
+
 
 function userController(){
     function getQuesitnners(req,res){
@@ -31,6 +32,7 @@ function userController(){
                     console.log(user);
                     user.populate('typeUser',function(err,middle)
                     {
+                        console.log("gggg", middle);
                         if(err){
                             console.log("err2");
                             return res.status(500).send()
@@ -39,26 +41,43 @@ function userController(){
                             if(err){
                                 console.log("err3");
                                 return res.status(500).send()
-                                
                             }
+                            academic.findOne({fullName:result.academic},function(err,test){
+                                if(err){
+                                    return res.status(500).send()
+                                }
+                                test.interns.push(user);
+                                test.save()
+                                console.log(test);
+                            })
                             console.log(result, "this");
-                             res.status(200).send({"message":"update" , "obj":result})
+                            res.status(200).send({"message":"update" , "obj":result})
                         })
-                    })
-              
+                })
             }
               
           })
           
       }
+
+
+      function updataTestFile(req,res){
+        internSchema.findById({_id:req.user._id})
+    }
+
+
+
 function getAllAcademics(req,res){
      console.log("app");
-    academic.find(function(err,result){
+    academic.find({},{'fullName':1,'_id':0},function(err,result){
         if(err){
             return res.status(500).send()
     }
-    console.log(result.fullName);
-    res.status(200).send(result.fullName)
+    
+    var arr=result.map(data=>data.fullName)
+
+    console.log(arr);
+    res.status(200).send(arr)
 })
 }
     function getAll(req,res){
@@ -88,7 +107,8 @@ function getAllAcademics(req,res){
         getQuesitnners,
         updateQuesitnners,
         getAll,
-        getAllAcademics
+        getAllAcademics,
+        updataTestFile
         
     }
 }

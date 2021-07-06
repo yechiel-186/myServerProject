@@ -49,6 +49,7 @@ function supervisorController(){
             if(err){
                 return res.status(500).send()
             }
+            console.log(user2);
             res.status(200).send(user2.typeUser.interns);
         })
         

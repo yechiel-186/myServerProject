@@ -62,51 +62,94 @@ function adminController(){
     }
 
     function createSupervisor(req,res){
-        user.findOne({ID:req.user.ID},function(err,level1){
+        user.findOne({ID:req.user.ID},function(err,admin1){
                 if(err){
                     return res.status(500).send()
                 }
-                if(!level1){
+                if(!admin1){
                     return res.status(500).send({"message":"no access"})
                 }
-                user.findOne({ID:req.body.ID},function(err,level2){
+                var usernwe=req.body;
+                user.findOne({ID:usernwe.ID},function(err,user1){
                         if(err){
                             return res.status(500).send()
                         }
-                        if(level2){
+                        if(user1){
                     return res.status(300).send({"message":"this supervisor is created"})
                         }
-                academic.findOne({fullName:req.body.academic},function(err,level3){
-                    console.log(req.body.academic);
+                        req.body.role="supervisor";
+                        req.body.roleNumber=200;
+                        var newuser=new user(req.body);
+                        newuser.save(function(err,user2){
+                            if(err){
+                                return res.status(500).send()
+                            }
+                            var newSupervisor=new supervisor()
+                            newSupervisor.save(function(err,supervisor2){
+                                if(err){
+                                    return res.status(500).send()
+                                }
+                                user2.typeUser=supervisor2
+                                user2.save()
+
+                            })
+
+                        })
+
+
+
+
+
+
+
+
+
+
+                academic.findOne({fullName:req.body.academic},function(err,academic1){
+                    console.log(academic1, "academic1");
                     if(err){
                         return res.status(500).send()
                     }
                     var newSupervisor=new supervisor();
-                    newSupervisor.save(function(err,level4){
+                    newSupervisor.save(function(err,supervisor1){
+                        console.log(supervisor1, "supervisor1");
                         if(err){
                             return res.status(500).send()
                         }
-                        req.body.role="supervisor";
-                        req.body.roleNumber=200;
+                        
                         var newUser=new user(req.body);
-                        newUser.save(function(err,level5){
+                        newUser.save(function(err,newuser1){
+                            console.log(newuser1, "newuser1");
                             if(err){
-                                console.log("test");
                                 return res.status(500).send()
                             }
-                            level5.typeUser=level4;
-                            level5.typeUser.save(function(err,level6){
+                            newuser1.typeUser=supervisor1;
+                            newuser1.typeUser.save(function(err,newuser2){
+                                console.log(newuser2, "newuser2");
                                 if(err){
                                     return res.status(500).send()
                                 }
-                            })
-                            level4.academic=level3;
-                            level4.save()
-                            console.log(level3);
-                            level3.supervisors.push(level4)
-                                level3.save()
+                            newuser2.academic=academic1;
+                            newuser2.academic.save(function(err,academic2){
+                                console.log(academic2, "academic2");
+                                if(err){
+                                    return res.status(500).send()
+                                }
+                            
+                            academic2.supervisors.push(supervisor1)
+
+                                academic2.save(function(err,academic3){
+                                    console.log(academic3);
+                                    if(err){
+                                        return res.status(500).send()
+                                    }
+
+                               
                                 res.status(201).send({"message":"supervisor create"})
                             })
+                         })
+                         })
+                          })
                         }) 
                     })
                 })
@@ -158,7 +201,7 @@ function adminController(){
                         return res.status(500).send()
                     }
                     var arr=result.typeUser.academics.map(a=>a.fullName);
-                    
+                    console.log(arr,"admin");
                     res.status(200).send(arr)
                 });
                 
