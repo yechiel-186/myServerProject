@@ -6,15 +6,15 @@ var testSchema = new Schema({
     subject:String,
     url:String,
     score:Number,
-    isNew:{
+    new:{
         type:Boolean,
         default:true
     },
     date:{
         type:Date,
-        default:new Date.now()
+        default:Date.now()
     },
-    supervisors:{
+    supervisor:{
         type:mongoose.Types.ObjectId,ref:'user'
     },
     intern:{

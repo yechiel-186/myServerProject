@@ -1,56 +1,38 @@
 const internSchema = require("../models/internSchema");
 const userSchema = require("../models/userSchema");
 const academic=require('../models/academicScema');
+const test =require('../models/testSchema');
 
 
 function userController(){
     function getQuesitnners(req,res){
         userSchema.findOne({ID:req.user.ID},function(err,user){
-            console.log(req.user.ID);
-            if(err){
-               return res.status(401).send();
-            }
+            error(err,res);
             if(!user){
                 console.log("no user");
             }
         user.populate('typeUser',function(err,result){
-            if(err){
-                return res.status(401).send();
-            }
+            error(err,res);
                 res.status(200).send(result.typeUser)
         })    
     }   
         )}
+
+
       function updateQuesitnners(req,res){
           console.log('up work');
           userSchema.findById(req.user._id,function(err,user){
-              console.log(req.body);
-              if(err){
-                  console.log("err1");
-                  return res.status(500).send()
-              }if(user){
-                    console.log(user);
+              error(err,res);
+                if(user){
                     user.populate('typeUser',function(err,middle)
                     {
-                        console.log("gggg", middle);
-                        if(err){
-                            console.log("err2");
-                            return res.status(500).send()
-                        }
+                        error(err,res);
                         middle.typeUser.overwrite(req.body).save(function(err,result){
-                            if(err){
-                                console.log("err3");
-                                return res.status(500).send()
-                            }
+                            error(err,res);
                             academic.findOne({fullName:result.academic},function(err,test){
-                                if(err){
-                                    return res.status(500).send()
-                                }
-                                test.interns.push(user);
+                                error(err,res);
                                 test.save()
-                                console.log(test);
                             })
-                            console.log(result, "this");
                             res.status(200).send({"message":"update" , "obj":result})
                         })
                 })
@@ -62,9 +44,32 @@ function userController(){
 
 
       function updataTestFile(req,res){
-        internSchema.findById({_id:req.user._id})
+          console.log("זה עובד");
+        userSchema.findOne({_id:req.user._id},function(err,user1){
+            error(err,res)
+            user1.populate('typeUser',function(err,user2){
+                error(err,res)
+            newTest=new test(req.body.testFile)
+            newTest.save(function(err,test1){
+                error(err,res)
+                user2.typeUser.testPost.push(test1);
+                user2.typeUser.save(function(err,user3){
+                    error(err,res);
+                })
+                
+            })
+            })
+        })
     }
-
+function getHoldTest(req,res){
+    userSchema.findOne({_id:req.user._id},function(err,user1){
+        error(err,res)
+        user1.populate('typeUser',function(err,user2){
+            error(err,res)
+        res.status(200).send(user2.typeUser.testPost)
+        })
+    })
+}
 
 
 function getAllAcademics(req,res){
@@ -99,6 +104,11 @@ function getAllAcademics(req,res){
         console.log("delete");
     }
 
+    function error(err,res){
+        if(err){
+            res.status(500).send(err)
+        }
+    }
 
     return{
         getAll,
@@ -108,7 +118,8 @@ function getAllAcademics(req,res){
         updateQuesitnners,
         getAll,
         getAllAcademics,
-        updataTestFile
+        updataTestFile,
+        getHoldTest
         
     }
 }

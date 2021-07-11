@@ -8,32 +8,20 @@ const academic=require('../models/academicScema');
 function adminController(){
     function createAdmin(req,res){
         user.findOne({ID:req.body.ID},function(err,user1){
-            if(err){
-                console.log("1");
-                return res.status(500).send(err)
-            }
+            error(err,res);
             if(user1){
-                console.log("2");
                 return res.status(400).send({"message":"you are registed"})
             }
             var newAdmin=new admin({password:req.body.password})
             newAdmin.save(function(err,middle){
-                console.log("5");
-                console.log(middle);
-                if(err){
-                    return res.status(500).send(err)
-                }
+                error(err,res);
             req.body.roleNumber=500;
             req.body.role="admin";
             req.body.phone=Date.now();
             var newUser=new user(req.body)
             newUser.typeUser=middle;
-            console.log(newUser);
             newUser.save(function(err,result){
-                if(err){
-                    console.log("4");
-                    return res.status(500).send(err)
-                }   
+                error(err,res);  
             var newUserToken= new userToken(true,0,result,result._id);                       
             res.status(201).send({token:newUserToken.token});
 
@@ -44,14 +32,10 @@ function adminController(){
     }
     function loginAdmin(req,res){
         user.findOne({ID:req.body.ID},function(err,user1){
-            if(err){
-                return res.status(500).send()  
-            }
+            error(err,res);
             user1.populate('typeUser',function(err,user2){
                 console.log(user2);
-                if(err){
-                    return res.status(500).send()  
-                }
+                error(err,res);
                 if(user2.typeUser.password!=req.body.password){
                     return res.status(400).send({"message":"password is not true"})
                 }
@@ -63,17 +47,13 @@ function adminController(){
 
     function createSupervisor(req,res){
         user.findOne({ID:req.user.ID},function(err,admin1){
-                if(err){
-                    return res.status(500).send()
-                }
+            error(err,res);
                 if(!admin1){
                     return res.status(500).send({"message":"no access"})
                 }
                 var usernwe=req.body;
                 user.findOne({ID:usernwe.ID},function(err,user1){
-                        if(err){
-                            return res.status(500).send()
-                        }
+                    error(err,res);
                         if(user1){
                     return res.status(300).send({"message":"this supervisor is created"})
                         }
@@ -81,14 +61,10 @@ function adminController(){
                         req.body.roleNumber=200;
                         var newuser=new user(req.body);
                         newuser.save(function(err,user2){
-                            if(err){
-                                return res.status(500).send()
-                            }
+                            error(err,res);
                             var newSupervisor=new supervisor()
                             newSupervisor.save(function(err,supervisor2){
-                                if(err){
-                                    return res.status(500).send()
-                                }
+                                error(err,res);
                                 user2.typeUser=supervisor2
                                 user2.save()
 
@@ -107,42 +83,30 @@ function adminController(){
 
                 academic.findOne({fullName:req.body.academic},function(err,academic1){
                     console.log(academic1, "academic1");
-                    if(err){
-                        return res.status(500).send()
-                    }
+                    error(err,res);
                     var newSupervisor=new supervisor();
                     newSupervisor.save(function(err,supervisor1){
                         console.log(supervisor1, "supervisor1");
-                        if(err){
-                            return res.status(500).send()
-                        }
+                        error(err,res);
                         
                         var newUser=new user(req.body);
                         newUser.save(function(err,newuser1){
                             console.log(newuser1, "newuser1");
-                            if(err){
-                                return res.status(500).send()
-                            }
+                            error(err,res);
                             newuser1.typeUser=supervisor1;
                             newuser1.typeUser.save(function(err,newuser2){
                                 console.log(newuser2, "newuser2");
-                                if(err){
-                                    return res.status(500).send()
-                                }
+                                error(err,res);
                             newuser2.academic=academic1;
                             newuser2.academic.save(function(err,academic2){
                                 console.log(academic2, "academic2");
-                                if(err){
-                                    return res.status(500).send()
-                                }
+                                error(err,res);
                             
                             academic2.supervisors.push(supervisor1)
 
                                 academic2.save(function(err,academic3){
                                     console.log(academic3);
-                                    if(err){
-                                        return res.status(500).send()
-                                    }
+                                    error(err,res);
 
                                
                                 res.status(201).send({"message":"supervisor create"})
@@ -163,29 +127,21 @@ function adminController(){
 
     function createAcademic(req,res){
         user.findById(req.user._id,function(err,level1){
-            if(err){
-                return res.status(500).send()
-            }
+            error(err,res);
             academic.findOne(req.body,function(err,level2){
                 console.log("level2", level2);
-            if(err){
-                return res.status(500).send()
-            }
+                error(err,res);
             if(level2){
                 return res.status(300).send()
             }
             var newAcademic=new academic(req.body);
             console.log("newacademic", newAcademic);
             newAcademic.save(function(err,level3){
-                if(err){
-                    return res.status(500).send()
-                }
+                error(err,res);
                 console.log("level3", level3);
 
                 level1.populate('typeUser',function(err,level4){
-                if(err){
-                        return res.status(500).send()
-                }
+                    error(err,res);
 
                 level4.typeUser.academics.push(level3);
                 level1.typeUser.save();
@@ -197,9 +153,7 @@ function adminController(){
         )}
             function getAcademic(req,res){
                 user.findById(req.user._id).populate({path:'typeUser',populate:{path:'academics', select:'fullName -_id' }}).exec(function(err,result){
-                    if(err){
-                        return res.status(500).send()
-                    }
+                    error(err,res);
                     var arr=result.typeUser.academics.map(a=>a.fullName);
                     console.log(arr,"admin");
                     res.status(200).send(arr)
@@ -207,7 +161,11 @@ function adminController(){
                 
             }
 
-    
+            function error(err,res){
+                if(err){
+                    res.status(500).send(err)
+                }
+            }
 
     return{
         createAdmin,
