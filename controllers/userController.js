@@ -36,39 +36,39 @@ function userController(){
                             res.status(200).send({"message":"update" , "obj":result})
                         })
                 })
-            }
-              
+            }  
           })
-          
       }
 
 
-      function updataTestFile(req,res){
-          console.log("זה עובד");
+      function postTestAnswers(req,res){
         userSchema.findOne({_id:req.user._id},function(err,user1){
             error(err,res)
             user1.populate('typeUser',function(err,user2){
                 error(err,res)
-            newTest=new test(req.body.testFile)
+            newTest=new test(req.body)
+                
+            newTest.intern=user2;
             newTest.save(function(err,test1){
                 error(err,res)
-                user2.typeUser.testPost.push(test1);
+                user2.typeUser.testAnswers.push(test1);
                 user2.typeUser.save(function(err,user3){
                     error(err,res);
                 })
-                
             })
             })
         })
     }
-function getHoldTest(req,res){
+
+function getAllTests(req,res){
     userSchema.findOne({_id:req.user._id},function(err,user1){
         error(err,res)
-        user1.populate('typeUser',function(err,user2){
-            error(err,res)
-        res.status(200).send(user2.typeUser.testPost)
-        })
+       test.find({intern:req.user._id},function(err,allTest1){
+        error(err,res)
+        res.status(201).send(allTest1)
+        console.log(allTest1);
     })
+})
 }
 
 
@@ -118,8 +118,8 @@ function getAllAcademics(req,res){
         updateQuesitnners,
         getAll,
         getAllAcademics,
-        updataTestFile,
-        getHoldTest
+        postTestAnswers,
+        getAllTests
         
     }
 }

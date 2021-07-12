@@ -1,5 +1,6 @@
 const user=require('../models/userSchema')
 const intern=require('../models/internSchema')
+const test=require('../models/testSchema')
 
 function supervisorController(){
     function loginSupervisorEndCreateIntern(req,res){
@@ -80,11 +81,26 @@ function supervisorController(){
 
 
 
+    function createTest(req,res){
+        user.findById(req.user._id,function(err,user1){
+            var newTest=new test(req.body)
+            newTest.save()
+            user1.populate('typeUser',function(err,user2){
+                user2.typeUser.tests.push(newTest)
+                user2.save()
+                res.status(200).send({"message":"new test created"})
+            })
+        })
+    }
+
+
+
     return{
         loginSupervisorEndCreateIntern,
         getInterns,
         addInterns,
-        getAllInternsAcademic
+        getAllInternsAcademic,
+        createTest
     }
 }
 

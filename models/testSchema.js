@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 var testSchema = new Schema({
-    testName:String,
     subject:String,
     url:String,
     score:Number,
+    questions:Boolean,
+    answers:Boolean,
     new:{
         type:Boolean,
         default:true

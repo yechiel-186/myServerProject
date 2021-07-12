@@ -29,10 +29,10 @@ var internSchema=new Schema ({
     yearResidency:{
         type:Number
     },
-    testGet:[{
+    testQuestions:[{
         type:mongoose.Types.ObjectId,refPath:'test'
     }],
-    testPost:[{
+    testAnswers:[{
         type:mongoose.Types.ObjectId,refPath:'test'
     }]
 });

@@ -19,6 +19,7 @@ function loginController(){
             }          
         } ) 
     }
+    
     function checkCode(req,res){
         loginSchema.findOne(req.body, function (err, doc){
             error(err,res);

@@ -45,84 +45,52 @@ function adminController(){
         })
     }
 
+
     function createSupervisor(req,res){
         user.findOne({ID:req.user.ID},function(err,admin1){
             error(err,res);
-                if(!admin1){
-                    return res.status(500).send({"message":"no access"})
-                }
-                var usernwe=req.body;
-                user.findOne({ID:usernwe.ID},function(err,user1){
-                    error(err,res);
-                        if(user1){
+            if(!admin1){
+                return res.status(500).send({"message":"no access"})
+            }
+            var nowUser=req.body;
+            user.findOne({ID:nowUser.ID},function(err,step1){
+                error(err,res);
+                if(step1){
                     return res.status(300).send({"message":"this supervisor is created"})
-                        }
-                        req.body.role="supervisor";
-                        req.body.roleNumber=200;
-                        var newuser=new user(req.body);
-                        newuser.save(function(err,user2){
-                            error(err,res);
-                            var newSupervisor=new supervisor()
-                            newSupervisor.save(function(err,supervisor2){
-                                error(err,res);
-                                user2.typeUser=supervisor2
-                                user2.save()
-
-                            })
-
-                        })
-
-
-
-
-
-
-
-
-
-
-                academic.findOne({fullName:req.body.academic},function(err,academic1){
-                    console.log(academic1, "academic1");
+                }
+                nowUser.role='supervisor';
+                nowUser.roleNumber=200;
+                var newUser=new user(nowUser)
+                newUser.save(function(err,step2){
                     error(err,res);
-                    var newSupervisor=new supervisor();
-                    newSupervisor.save(function(err,supervisor1){
-                        console.log(supervisor1, "supervisor1");
+                    var newsupervisor=new supervisor();
+                    newsupervisor.save(function(err,supervisor2){
                         error(err,res);
-                        
-                        var newUser=new user(req.body);
-                        newUser.save(function(err,newuser1){
-                            console.log(newuser1, "newuser1");
+                        step2.typeUser=supervisor2;
+                       step2.save(function(err,step3){
+                        error(err,res);
+                        academic.findOne({fullName:nowUser.academic},function(err,academic2){
                             error(err,res);
-                            newuser1.typeUser=supervisor1;
-                            newuser1.typeUser.save(function(err,newuser2){
-                                console.log(newuser2, "newuser2");
-                                error(err,res);
-                            newuser2.academic=academic1;
-                            newuser2.academic.save(function(err,academic2){
-                                console.log(academic2, "academic2");
-                                error(err,res);
-                            
-                            academic2.supervisors.push(supervisor1)
-
+                                academic2.supervisors.push(supervisor2)
                                 academic2.save(function(err,academic3){
-                                    console.log(academic3);
                                     error(err,res);
+                                    console.log(academic3);
+                                    res.status(201).send({"message":"supervisor create"})
 
-                               
-                                res.status(201).send({"message":"supervisor create"})
-                            })
-                         })
-                         })
-                          })
-                        }) 
+                       })
+                              
+                                  
+                        })
+                    
+                                })
+
+                })
+                        })
                     })
                 })
-            })
-        }
-
-
-
-       
+           
+     
+    }
 
 
     function createAcademic(req,res){

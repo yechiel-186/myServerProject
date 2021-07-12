@@ -8,6 +8,9 @@ var supervisorSchema = new Schema({
     },
     interns:[{
         type:Schema.Types.ObjectId,ref:'intern'
+    }],
+    tests:[{
+        type:Schema.Types.ObjectId,ref:'test'
     }]
 
 
