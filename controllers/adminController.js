@@ -30,6 +30,7 @@ function adminController(){
             })
             
     }
+
     function loginAdmin(req,res){
         user.findOne({ID:req.body.ID},function(err,user1){
             error(err,res);
@@ -94,6 +95,7 @@ function adminController(){
 
 
     function createAcademic(req,res){
+        console.log(req.body);
         user.findById(req.user._id,function(err,level1){
             error(err,res);
             academic.findOne(req.body,function(err,level2){

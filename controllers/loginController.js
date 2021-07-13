@@ -31,8 +31,11 @@ function loginController(){
                     error(err,res);
                     if(user){
                         console.log(user);
-                    var newToken=new userToken(true,0,user,user._id);
-                    return res.status(201).send({token:newToken.token, user:user})
+                        user.populate('typeUser',function(err,user2){
+                            error(err,res);
+                            var newToken=new userToken(true,0,user,user2.typeUser._id);
+                            return res.status(201).send({token:newToken.token, user:user})
+                        })
                 }
                 }) 
             }

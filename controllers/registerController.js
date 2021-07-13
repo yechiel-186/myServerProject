@@ -53,7 +53,7 @@ function ImageAuthentication(req,res){
                             error(err,res);
                             result.typeUser=end;
                             result.save();
-                        var newUserToken= new userToken(true,0,result,result._id);                       
+                        var newUserToken= new userToken(true,0,result,end._id);                       
                         return res.status(201).send({token:newUserToken.token,user:result});
                         })
                     } 
