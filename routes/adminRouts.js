@@ -17,7 +17,7 @@ adminRouts.use('/api/verify',function(req,res,next){
 })
 adminRouts.post('/api/verify/createSupervisor',adminController.createSupervisor);
 adminRouts.post('/api/verify/createAcademic',adminController.createAcademic);
-adminRouts.get('/api/verify/getacademic',adminController.getAcademic)
+
 
 
 module.exports=adminRouts;

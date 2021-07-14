@@ -3,10 +3,9 @@ const Schema = mongoose.Schema;
 
 var testSchema = new Schema({
     subject:String,
-    url:String,
     score:Number,
-    questions:Boolean,
-    answers:Boolean,
+    questionsUrl:String,
+    answersUrl:String,
     new:{
         type:Boolean,
         default:true
@@ -15,12 +14,7 @@ var testSchema = new Schema({
         type:Date,
         default:Date.now()
     },
-    supervisor:{
-        type:mongoose.Types.ObjectId,ref:'user'
-    },
-    intern:{
-        type:mongoose.Types.ObjectId,ref:'user'
-    }
+    supervisor:String
 });
 
 module.exports = mongoose.model("test", testSchema);

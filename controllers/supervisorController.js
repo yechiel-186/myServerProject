@@ -1,6 +1,8 @@
 const user=require('../models/userSchema')
 const intern=require('../models/internSchema')
 const test=require('../models/testSchema')
+const supervisor=require('../models/supervisorSchema');
+const academicScema = require('../models/academicScema');
 
 function supervisorController(){
     function loginSupervisorEndCreateIntern(req,res){
@@ -46,23 +48,39 @@ function supervisorController(){
         })
     }
     function getInterns(req,res){
-        user.findById(req.user._id).populate({path:'typeUser', select:'interns'}).exec(function(err,user2){
+
+        supervisor.findById(req.user._ids,{select:'interns'}).exec(function(err,user2){
             if(err){
                 return res.status(500).send()
             }
             console.log(user2);
-            res.status(200).send(user2.typeUser.interns);
+            res.status(200).send(user2.interns);
         })
         
     }
 
+    //  can
 
     function getAllInternsAcademic(req,res){
-        console.log("ghun");
-        user.findById(req.user._id).populate({path:'typeUser',populate:{path:'supervisor',populate:{path:'academic',populate:{path:'interns'}}}}).exec(function(err,user){
+
+        supervisor.findById(req.user._ids).populate({path:'academic',populate:{path:'interns'}}).exec(function(err,academic2){
             
-            console.log(user);
+            if(err){
+                return res.status(500).send()
+            }
+            // academic2.populate('interns',function(err,academic3){
+            //     if(err){
+            //         return res.status(500).send()
+            //     }
+                console.log(academic2);
+                res.status(200).send(academic2.interns);
+            //})
         })
+
+
+        // user.findById(req.user._id).populate({path:'typeUser',populate:{path:'supervisor',populate:{path:'academic',populate:{path:'interns'}}}}).exec(function(err,user){
+        //     console.log(user);
+        // })
         
     }
 
@@ -82,13 +100,18 @@ function supervisorController(){
 
 
     function createTest(req,res){
-        user.findById(req.user._id,function(err,user1){
+        console.log(req.body);
+        supervisor.findById(req.user._ids,function(err,user1){
             var newTest=new test(req.body)
-            newTest.save()
-            user1.populate('typeUser',function(err,user2){
-                user2.typeUser.tests.push(newTest)
-                user2.save()
-                res.status(200).send({"message":"new test created"})
+            newTest.supervisor=req.user.fullName;
+            newTest.save(function(err,test2){
+                if(err){
+                    return res.status(500).send()
+                }
+                user1.tests.push(test2)
+                    user1.save()
+                    res.status(200).send({"message":"new test created"})
+           
             })
         })
     }

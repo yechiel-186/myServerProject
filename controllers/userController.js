@@ -6,38 +6,34 @@ const test =require('../models/testSchema');
 
 function userController(){
     function getQuesitnners(req,res){
-        userSchema.findOne({ID:req.user.ID},function(err,user){
+        internSchema.findById(req.user._ids,function(err,intern1){
             error(err,res);
-            if(!user){
+            if(!intern1){
                 console.log("no user");
             }
-        user.populate('typeUser',function(err,result){
-            error(err,res);
-                res.status(200).send(result.typeUser)
-        })    
+       res.status(200).send(intern1)
     }   
         )}
 
 
       function updateQuesitnners(req,res){
-          console.log('up work');
-          userSchema.findById(req.user._id,function(err,user){
-              error(err,res);
-                if(user){
-                    user.populate('typeUser',function(err,middle)
-                    {
+        internSchema.findById(req.user._ids,function(err,intern1){
+            error(err,res);
+           intern1.overwrite(req.body).save(function(err,intern2){
+            error(err,res);
+            intern2.save(function(err,intern3){
+                error(err,res);
+                academic.findOne({fullName:intern3.academic},function(err,academic2){
+                    error(err,res);
+                    academic2.interns.push(req.user._id)
+                    academic2.save(function(err,academic3){
                         error(err,res);
-                        middle.typeUser.overwrite(req.body).save(function(err,result){
-                            error(err,res);
-                            academic.findOne({fullName:result.academic},function(err,test){
-                                error(err,res);
-                                test.save()
-                            })
-                            res.status(200).send({"message":"update" , "obj":result})
-                        })
+                        res.status(200).send({"message":"update" , "obj":intern3})
+                    })
                 })
-            }  
-          })
+            })
+           })          
+        })
       }
 
 

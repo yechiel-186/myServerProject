@@ -30,7 +30,6 @@ function loginController(){
                 userSchema.findOne({phone:doc.phone},function(err,user){
                     error(err,res);
                     if(user){
-                        console.log(user);
                         user.populate('typeUser',function(err,user2){
                             error(err,res);
                             var newToken=new userToken(true,0,user,user2.typeUser._id);
